@@ -103,10 +103,20 @@ function check_collision(x1, y1, x1, y2) {
   else return false;
 }
 
+function create_food() {
+  food.x = Math.floor(Math.random() * ((width / cell_width) - 1));
+  food.y = Math.floor(Math.random() * ((height / cell_width) - 1));
+  for(i = 0; i < snake.length; i++) {
+    if(check_collision(food.x, food.y, snake[i].x, snake[i].y))
+      create_food();
+  }
+}
+
 function new_game(){
   direction = "right";
   direction_queue = "right";
   create_snake();
+  create_food();
   if(typeof loop !== "undefined")
     clearInterval(loop);
   loop = setInterval(game, fps);
