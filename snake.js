@@ -59,6 +59,31 @@ function game(){
   paint_snake();
 }
 
+function move_snake() {
+  //determine the coordinates of the head and calculate its' new position
+  var x = snake[0].x;
+  var y = snake[0].y;
+  direction = direction_queue;
+  if (direction == "right") x++;
+  else if(direction == "left") x--;
+  else if(direction == "top") y--;
+  else if(direction == "bottom") y++;
+
+  //pop off the tail and make it the new head... GENIUS!
+  var tail = snake.pop();
+  tail.x = x;
+  tail.y = y;
+  snake.unshift(tail); 
+}
+
+function change_direction(keycode) {
+  //as long as the player doesn't move in the opposite direction, set it in the queue
+  if(keycode == 37 && direction != "right") direction_queue = "left";
+  else if(keycode == 38 && direction != "bottom") direction_queue = "top";
+  else if(keycode == 39 && direction != "left") direction_queue = "right";
+  else if(keycode == 40 && direction != "top") direction_queue = "bottom";
+}
+
 function new_game(){
   direction = "right";
   direction_queue = "right";
@@ -66,6 +91,11 @@ function new_game(){
   if(typeof loop !== "undefined")
     clearInterval(loop);
   loop = setInterval(game, fps);
+  canvas.onkeydown = function(evt) {
+    evt = evt || window.event;
+    change_direction(evt.keycode);
+  }
 }
+
 
 new_game();
