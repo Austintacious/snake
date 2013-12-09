@@ -57,6 +57,19 @@ function game(){
   ctx.beginPath();
   paint_background();
   paint_snake();
+  var head = snake[0];
+  //Check for wall collisions
+  if(head.x < 0 || head.x == width / cell_width || head.y < 0 || head.y == height / cell_width) {
+    new_game();
+    return;
+  }
+  //Ouroboros check!
+  for(i = 1; i < snake.length; i++) {
+    if(head.x == snake[i].x && head.y == snake[i].y) {
+      new_game();
+      return;
+    }
+  }
 }
 
 function move_snake() {
@@ -82,6 +95,12 @@ function change_direction(keycode) {
   else if(keycode == 38 && direction != "bottom") direction_queue = "top";
   else if(keycode == 39 && direction != "left") direction_queue = "right";
   else if(keycode == 40 && direction != "top") direction_queue = "bottom";
+}
+
+function check_collision(x1, y1, x1, y2) {
+  if(x1 == x2 && y1 == y2)
+    return true;
+  else return false;
 }
 
 function new_game(){
